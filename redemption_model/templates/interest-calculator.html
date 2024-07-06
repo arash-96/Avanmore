@@ -11,33 +11,46 @@
 
 <body>
     <div class="container mt-5">
-        <h2>Total Interest Calculator</h2>
-        <br />
-        <br />
-        <div class="centered-container">
-            <form method="POST">
-                {% csrf_token %}
-                <div class="form-group w-50">
-                    <label>Facility A (Land Advance)</label>
-                    <input type="number" class="form-control" id="facilityInput" name="facilityInput">
-                </div>
-                <div class="form-group w-50">
-                    <label>Contractual Monthly Rate (%pm)</label>
-                    <input type="number" class="form-control" id="contractualInput" name="contractualInput">
-                </div>
-                <div class="form-group w-50">
-                    <label>Beginning Of Default Period</label>
-                    <input type="date" class="form-control" id="beginningDate" name="beginningDate">
-                </div>
-                <div class="form-group w-50">
-                    <label>End Of Default Period</label>
-                    <input type="date" class="form-control" id="endDate" name="endDate">
-                </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Total Interest Calculator</h2>
                 <br />
-                <button type="submit" onclick="submitData();" class="btn btn-primary">Submit</button>
-            </form>
+                <br />
+                <div class="centered-container">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label>Facility A (Land Advance)</label>
+                            <input type="number" class="form-control" id="facilityInput" name="facilityInput">
+                        </div>
+                        <div class="form-group">
+                            <label>Contractual Monthly Rate (%pm)</label>
+                            <input type="number" class="form-control" id="contractualInput" name="contractualInput">
+                        </div>
+                        <div class="form-group">
+                            <label>Beginning Of Default Period</label>
+                            <input type="date" class="form-control" id="beginningDate" name="beginningDate">
+                        </div>
+                        <div class="form-group">
+                            <label>End Of Default Period</label>
+                            <input type="date" class="form-control" id="endDate" name="endDate">
+                        </div>
+                        <br />
+                        <button type="submit" onclick="submitData();" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-2 margin-top">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Result:</h5>
+                        <p class="card-text" id="result"></p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
 
     <!-- Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -67,7 +80,8 @@
                     return response.json();
                 })
                 .then(data => {
-                    alert("The result is: " + data.result);
+                    //alert("The result is: " + data.result);
+                    $("#result").html(data.result);
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -86,5 +100,9 @@
     .centered-container {
         justify-content: center;
         align-items: center;
+    }
+
+    .margin-top {
+        margin-top: 150px;
     }
 </style>
