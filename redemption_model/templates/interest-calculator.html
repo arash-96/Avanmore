@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Total Interest Calculator</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2>Total Interest Calculator</h2>
+        <br />
+        <br />
+        <div class="centered-container">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group w-50">
+                    <label>Facility A (Land Advance)</label>
+                    <input type="number" class="form-control" id="facilityInput" name="facilityInput">
+                </div>
+                <div class="form-group w-50">
+                    <label>Contractual Monthly Rate (%pm)</label>
+                    <input type="number" class="form-control" id="contractualInput" name="contractualInput">
+                </div>
+                <div class="form-group w-50">
+                    <label>Beginning Of Default Period</label>
+                    <input type="date" class="form-control" id="beginningDate" name="beginningDate">
+                </div>
+                <div class="form-group w-50">
+                    <label>End Of Default Period</label>
+                    <input type="date" class="form-control" id="endDate" name="endDate">
+                </div>
+                <br />
+                <button type="submit" onclick="submitData();" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function submitData() {
+            event.preventDefault();
+
+            let formData = new FormData()
+            formData.append("facilityInput", $("#facilityInput").val());
+            formData.append("contractualInput", $("#contractualInput").val());
+            formData.append("beginningDate", $("#beginningDate").val());
+            formData.append("endDate", $("#endDate").val());
+
+            fetch('/submit_data/', {
+                method: 'POST',
+                headers: {
+                    "X-CSRFToken": getCookie("csrftoken") // Function to get CSRF token
+                },
+                body: formData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert("The result is: " + data.result);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+    </script>
+</body>
+
+</html>
+<style>
+    .centered-container {
+        justify-content: center;
+        align-items: center;
+    }
+</style>
