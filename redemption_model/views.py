@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from datetime import datetime
 from django.http import HttpResponse, JsonResponse
+from .utils import calculate_total_interest
 
 # Create your views here.
 def total_interest_calculator(request):
@@ -14,11 +14,10 @@ def calculate_interest(request):
         beginning_date = request.POST.get('beginningDate')
         end_date = request.POST.get('endDate')
 
-        result = float(facility_a) * float(contractual_rate)
+        #print(facility_a, contractual_rate, beginning_date, end_date)
+        result = calculate_total_interest(facility_a, contractual_rate, beginning_date, end_date)
 
-        print(result)
-        
-        return JsonResponse({'result': result})
+        return JsonResponse({'result': round(result)})
     else:
         return HttpResponse('Invalid request method.')
         

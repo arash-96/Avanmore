@@ -36,7 +36,7 @@
                             <input type="date" class="form-control" id="endDate" name="endDate">
                         </div>
                         <br />
-                        <button type="submit" onclick="submitData();" class="btn btn-primary">Submit</button>
+                        <button type="submit" onclick="submitData();" class="btn btn-primary">Calculate</button>
                     </form>
                 </div>
             </div>
@@ -60,16 +60,22 @@
         function submitData() {
             event.preventDefault();
 
+            const facilityInput = $("#facilityInput").val();
+            //handle validation
+            //If any errors, then throw error here
+
+
             let formData = new FormData()
             formData.append("facilityInput", $("#facilityInput").val());
             formData.append("contractualInput", $("#contractualInput").val());
             formData.append("beginningDate", $("#beginningDate").val());
             formData.append("endDate", $("#endDate").val());
 
+
             fetch('/submit_data/', {
                 method: 'POST',
                 headers: {
-                    "X-CSRFToken": getCookie("csrftoken") // Function to get CSRF token
+                    "X-CSRFToken": getCookie("csrftoken")
                 },
                 body: formData
             })
@@ -87,10 +93,12 @@
                     console.error('Error:', error);
                 });
         }
+        //Function to get CSRF Token
         function getCookie(name) {
             const value = `; ${document.cookie}`;
             const parts = value.split(`; ${name}=`);
             if (parts.length === 2) return parts.pop().split(';').shift();
+            return '';
         }
     </script>
 </body>
