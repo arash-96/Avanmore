@@ -95,7 +95,6 @@
                         return response.json();
                     })
                     .then(data => {
-                        //alert("The result is: " + data.result);
                         $("#result").html(data.result);
                     })
                     .catch(error => {
