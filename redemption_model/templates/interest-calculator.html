@@ -57,48 +57,75 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        function submitData() {
-            event.preventDefault();
-
-            const facilityInput = $("#facilityInput").val();
-            //handle validation
-            //If any errors, then throw error here
-
-
-            let formData = new FormData()
-            formData.append("facilityInput", $("#facilityInput").val());
-            formData.append("contractualInput", $("#contractualInput").val());
-            formData.append("beginningDate", $("#beginningDate").val());
-            formData.append("endDate", $("#endDate").val());
-
-
-            fetch('/submit_data/', {
-                method: 'POST',
-                headers: {
-                    "X-CSRFToken": getCookie("csrftoken")
-                },
-                body: formData
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    //alert("The result is: " + data.result);
-                    $("#result").html(data.result);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
         //Function to get CSRF Token
         function getCookie(name) {
             const value = `; ${document.cookie}`;
             const parts = value.split(`; ${name}=`);
             if (parts.length === 2) return parts.pop().split(';').shift();
             return '';
+        }
+        //Submit Data
+        function submitData() {
+            event.preventDefault();
+
+            const facilityInput = $("#facilityInput").val();
+            const contractualInput = $("#contractualInput").val();
+            const beginningDate = $("#beginningDate").val();
+            const endDate = $("#endDate").val();
+
+            //Validation
+            let validated = validateFields();
+
+            if (validated) {
+                let formData = new FormData()
+                formData.append("facilityInput", facilityInput);
+                formData.append("contractualInput", contractualInput);
+                formData.append("beginningDate", beginningDate);
+                formData.append("endDate", endDate);
+
+
+                fetch('/submit_data/', {
+                    method: 'POST',
+                    headers: {
+                        "X-CSRFToken": getCookie("csrftoken")
+                    },
+                    body: formData
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        //alert("The result is: " + data.result);
+                        $("#result").html(data.result);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }
+        }
+        function validateFields() {
+            if ($("#facilityInput").val() == '') {
+                alert("Please insert a value for facility input and make sure it's a number");
+                return false;
+            }
+            if ($("#contractualInput").val() == '') {
+                alert("Please insert a value for contractual input and make sure it's a number");
+                return false;
+            }
+            if ($("#beginningDate").val() == '') {
+                alert("Please insert a value for beginning date");
+                return false;
+            }
+            if ($("#endDate").val() == '') {
+                alert("Please insert a value for end date");
+                return false;
+            }
+
+            // If all validations pass
+            return true;
         }
     </script>
 </body>
