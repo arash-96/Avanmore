@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+#Function returns total interest
 def calculate_total_interest(facility_A, contractual_monthly_rate, beginning_default_period, end_default_period):
 
     #Transform string to date (yyyy-mm-dd)

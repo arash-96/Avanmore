@@ -14,9 +14,9 @@ def calculate_interest(request):
         beginning_date = request.POST.get('beginningDate')
         end_date = request.POST.get('endDate')
 
-        #print(facility_a, contractual_rate, beginning_date, end_date)
         result = calculate_total_interest(facility_a, contractual_rate, beginning_date, end_date)
 
+        #Return a JSON Response
         return JsonResponse({'result': round(result)})
     else:
         return HttpResponse('Invalid request method.')
